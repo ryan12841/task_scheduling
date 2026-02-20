@@ -5,7 +5,7 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in);
     static ProjectDoa dao = new ProjectDoa();
-    static projectSheduler scheduler = new projectSheduler();
+    static projectScheduler scheduler = new projectScheduler();
 
     public static void main(String[] args) throws Exception {
 
@@ -28,11 +28,11 @@ public class Main {
         }
     }
 
-    static  void exitfunct()
-    {
-        System.out.println("Thank You For Using The Project Sheduler");
+    static void exitfunct() {
+        System.out.println("Thank You For Using The Project Scheduler");
         System.exit(0);
     }
+
     static void addProject() throws Exception {
 
         scanner.nextLine();
@@ -40,7 +40,7 @@ public class Main {
         System.out.print("Title: ");
         String title = scanner.nextLine();
 
-        System.out.print("Deadline : ");
+        System.out.print("Deadline (working days): ");
         int deadline = scanner.nextInt();
 
         System.out.print("Revenue: ");
@@ -57,14 +57,32 @@ public class Main {
 
     static void generateSchedule() throws Exception {
 
+        System.out.print("Enter number of planning weeks: ");
+        int numberOfWeeks = scanner.nextInt();
+
         List<project> projects = dao.getAllProjects();
-        List<project> schedule = scheduler.generateOptimalSchedule(projects);
 
-        System.out.println("\nOptimal Weekly Schedule:");
-        int day = 1;
+        project[][] calendar =
+                scheduler.generateOptimalSchedule(projects, numberOfWeeks);
 
-        for (project p : schedule) {
-            System.out.println("Day " + day++ + " -> " + p.getTitle());
+        System.out.println("\nFinal Schedule:\n");
+
+        for (int week = 0; week < numberOfWeeks; week++) {
+
+            System.out.println("Week " + (week + 1));
+
+            for (int day = 0; day < 5; day++) {
+
+                if (calendar[week][day] != null) {
+                    System.out.println("  Day " + (day + 1)
+                            + " -> " +
+                            calendar[week][day].getTitle());
+                } else {
+                    System.out.println("  Day " + (day + 1)
+                            + " -> No Project");
+                }
+            }
+            System.out.println();
         }
     }
 }
