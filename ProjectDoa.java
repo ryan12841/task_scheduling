@@ -4,10 +4,17 @@ import java.util.List;
 
 public class ProjectDoa {
 
-    // Insert Project
     public void addProject(project project) throws SQLException {
 
-        String sql = "INSERT INTO projects (title, deadline, revenue) VALUES (?, ?, ?)";
+        if (project.getDeadline() <= 0 ||
+                project.getExpectedRevenue() <= 0) {
+
+            System.out.println("Invalid project data!");
+            return;
+        }
+
+        String sql =
+                "INSERT INTO projects (title, deadline, revenue) VALUES (?, ?, ?)";
 
         try (Connection conn = DBconnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -21,24 +28,26 @@ public class ProjectDoa {
         }
     }
 
-    // Fetch All Projects
     public List<project> getAllProjects() throws SQLException {
 
         List<project> projects = new ArrayList<>();
-        String sql = "SELECT * FROM projects";
+
+        String sql =
+                "SELECT * FROM projects ORDER BY id";
 
         try (Connection conn = DBconnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
+
                 project project = new project(
                         rs.getString("title"),
                         rs.getInt("deadline"),
                         rs.getDouble("revenue")
                 );
-                project.setProjectId(rs.getInt("id"));
 
+                project.setProjectId(rs.getInt("id"));
                 projects.add(project);
             }
         }
