@@ -1,28 +1,31 @@
 import java.util.*;
 
-public class projectSheduler {
+public class ProjectScheduler {
 
-    public List<project> generateOptimalSchedule(List<project> projects) {
+    public List<Project> generateOptimalSchedule(List<Project> projects) {
 
-        int maxDays = 5;
+        int maxWorkingDays = 5; // Monday–Friday
 
-        // Sort by revenue descending
+        // Sort by revenue descending (your existing greedy logic)
         projects.sort((a, b) ->
                 Double.compare(b.getExpectedRevenue(), a.getExpectedRevenue()));
 
-        project[] schedule = new project[maxDays];
+        Project[] schedule = new Project[maxWorkingDays];
 
-        for (project project : projects) {
+        for (Project project : projects) {
 
-            // If deadline is more than working days, limit it
-            int deadline = Math.min(project.getDeadline(), maxDays);
-
-            // Try to schedule on latest possible day
-            for (int day = deadline - 1; day >= 0; day--) {
+            for (int day = maxWorkingDays - 1; day >= 0; day--) {
 
                 if (schedule[day] == null) {
-                    schedule[day] = project;
-                    break;
+
+                    int completionDay = day + getCompletionOffset(day);
+
+                    // Now check real deadline constraint
+                    if (completionDay <= project.getDeadline()) {
+
+                        schedule[day] = project;
+                        break;
+                    }
                 }
             }
         }
@@ -30,5 +33,12 @@ public class projectSheduler {
         return Arrays.stream(schedule)
                 .filter(Objects::nonNull)
                 .toList();
+    }
+
+    private int getCompletionOffset(int workingDayIndex) {
+        if (workingDayIndex == 4) { // Friday
+            return 3;
+        }
+        return 1;
     }
 }
