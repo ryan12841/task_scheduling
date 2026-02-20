@@ -2,17 +2,19 @@ public class project {
 
     private int projectId;
     private String title;
-    private int deadline;        // 1 to 5 days
+    private int deadline;   // working days (can be > 5)
     private double expectedRevenue;
 
-    // Constructor
+    // Predictive scheduling fields
+    private double score;
+    private int maxAllowedSlot;
+
     public project(String title, int deadline, double expectedRevenue) {
         this.title = title;
         this.deadline = deadline;
         this.expectedRevenue = expectedRevenue;
     }
 
-    // Getters and Setters
     public int getProjectId() {
         return projectId;
     }
@@ -25,27 +27,30 @@ public class project {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getDeadline() {
         return deadline;
-    }
-
-    public void setDeadline(int deadline) {
-        this.deadline = deadline;
     }
 
     public double getExpectedRevenue() {
         return expectedRevenue;
     }
 
-    public void setExpectedRevenue(double expectedRevenue) {
-        this.expectedRevenue = expectedRevenue;
+    public double getScore() {
+        return score;
     }
 
-    // Optional: toString() for printing
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+    public int getMaxAllowedSlot() {
+        return maxAllowedSlot;
+    }
+
+    public void setMaxAllowedSlot(int maxAllowedSlot) {
+        this.maxAllowedSlot = maxAllowedSlot;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
