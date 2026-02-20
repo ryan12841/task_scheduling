@@ -4,9 +4,8 @@ public class ProjectScheduler {
 
     public List<Project> generateOptimalSchedule(List<Project> projects) {
 
-        int maxWorkingDays = 5; // Monday–Friday
+        int maxWorkingDays = 5;
 
-        // Sort by revenue descending (your existing greedy logic)
         projects.sort((a, b) ->
                 Double.compare(b.getExpectedRevenue(), a.getExpectedRevenue()));
 
@@ -20,9 +19,7 @@ public class ProjectScheduler {
 
                     int completionDay = day + getCompletionOffset(day);
 
-                    // Now check real deadline constraint
                     if (completionDay <= project.getDeadline()) {
-
                         schedule[day] = project;
                         break;
                     }
@@ -35,6 +32,7 @@ public class ProjectScheduler {
                 .toList();
     }
 
+   
     private int getCompletionOffset(int workingDayIndex) {
         if (workingDayIndex == 4) { // Friday
             return 3;
